@@ -14,7 +14,7 @@ const AuthLayout: WFC<AuthLayoutProps> = ({ children, onSubmit }, rest) => {
       <form
         {...rest}
         onSubmit={submitHandler}
-        className="bg-space-gray p-6 rounded-2xl max-w-[426px] w-full flex flex-col gap-4 auth-modal-box-shadow">
+        className="bg-space-gray p-6 rounded-2xl h-full w-full md:w-[426px] md:h-min flex flex-col gap-4 justify-center auth-modal-box-shadow">
         {children}
       </form>
     </div>

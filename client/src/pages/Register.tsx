@@ -38,12 +38,12 @@ export const Register = () => {
 
   return (
     <AuthLayout onSubmit={handleSubmit(onSubmit)}>
-      <span className="text-2xl font-bold m-auto text-white">Register</span>
+      <span className="text-2xl font-bold mx-auto text-white">Register</span>
       <Input label="Nickname" {...register('nickname')} />
       <Input type="password" label="Password" {...register('password')} />
       <Input type="password" label="Confirm password" {...register('passwordConfirm')} />
       <Button type="submit">I'm excited!</Button>
-      <div className="text-gray text-sm m-auto">
+      <div className="text-gray text-sm mx-auto">
         Already have an account?
         <span className="text-light-blue cursor-pointer" onClick={goToLogin}>
           {' '}

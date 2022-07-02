@@ -34,12 +34,12 @@ export const Login = () => {
 
   return (
     <AuthLayout onSubmit={handleSubmit(onSubmit)}>
-      <span className="text-2xl font-bold m-auto text-white">Welcome to</span>
-      <TwilightLogo className="m-auto" />
+      <span className="text-2xl font-bold mx-auto text-white">Welcome to</span>
+      <TwilightLogo className="mx-auto" />
       <Input label="Nickname" {...register('nickname')} />
       <Input label="Password" {...register('password')} />
       <Button>Let's go</Button>
-      <div className="text-gray text-sm m-auto">
+      <div className="text-gray text-sm mx-auto">
         Need an account?
         <span className="text-light-blue cursor-pointer" onClick={goToRegister}>
           {' '}
