@@ -20,7 +20,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, error, .
               {label}
             </label>
           )}
-          {error && <span className="ml-1.5 text-red/60 text-xs">{error}</span>}
+          {error && <span className="ml-1.5 text-red/60 text-xs italic">{error}</span>}
         </div>
       )}
       <input
