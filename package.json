@@ -17,6 +17,7 @@
     "db:restart": "docker compose down && docker compose up -d && sleep 5",
     "pretest": "npm run db:restart  && dotenv -e .env.test -- prisma migrate reset --force",
     "test": "dotenv -e .env.test -- jest -i --no-cache",
+    "test:ci": "dotenv -e .env.test -- jest -i --no-cache",
     "pretest:watch": "npm run db:restart  && dotenv -e .env.test -- prisma migrate reset --force",
     "test:watch": "dotenv -e .env.test -- jest -i --no-cache --watch",
     "test:cov": "jest --coverage",
