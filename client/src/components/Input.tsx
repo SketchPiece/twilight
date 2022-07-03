@@ -2,8 +2,9 @@ import { forwardRef, ComponentProps } from 'react'
 import { classNames } from 'utils'
 
 interface InputProps extends ComponentProps<'input'> {
-  label?: string
-  error?: string
+  'label'?: string
+  'error'?: string
+  'error-cy'?: string
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, error, ...rest }, ref) => {
@@ -20,7 +21,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, error, .
               {label}
             </label>
           )}
-          {error && <span className="ml-1.5 text-red/60 text-xs italic">{error}</span>}
+          {error && (
+            <span data-cy={rest['error-cy']} className="ml-1.5 text-red/60 text-xs italic">
+              {error}
+            </span>
+          )}
         </div>
       )}
       <input

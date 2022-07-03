@@ -1,7 +1,8 @@
 import { ComponentProps } from 'react'
 import { classNames, WFC } from 'utils'
 
-export const Button: WFC<ComponentProps<'button'>> = ({ children, disabled }, rest) => {
+export const Button: WFC<ComponentProps<'button'>> = ({ children, disabled, ...rest }) => {
+  console.log(rest)
   return (
     <button
       disabled={disabled}

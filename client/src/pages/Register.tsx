@@ -10,10 +10,13 @@ const registerSchema = yup.object({
     .string()
     .required('is a required field')
     .min(4, 'is too short')
-    .matches(/^[^0-9]\w+$/, `can't start with a number contains only a-Z, 0-9`)
     .max(15, 'is too long'),
 
-  password: yup.string().required('is a required field').min(4, 'is too short'),
+  password: yup
+    .string()
+    .required('is a required field')
+    .min(4, 'is too short')
+    .max(20, 'is too long'),
   passwordConfirm: yup
     .string()
     .required('is a required field')
@@ -44,7 +47,10 @@ export const Register = () => {
       <Button type="submit">I'm excited!</Button>
       <div className="text-gray text-sm mx-auto">
         Already have an account?
-        <span className="text-light-blue cursor-pointer" onClick={() => navigate('/login')}>
+        <span
+          data-cy="switch"
+          className="text-light-blue cursor-pointer"
+          onClick={() => navigate('/login')}>
           {' '}
           Login
         </span>
