@@ -6,11 +6,11 @@ import App from './App'
 import './global.css'
 
 const Base = () => (
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+	<React.StrictMode>
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
+	</React.StrictMode>
 )
 
 ReactDOM.createRoot(document.getElementById('root')!).render(<Base />)

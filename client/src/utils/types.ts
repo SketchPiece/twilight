@@ -2,6 +2,6 @@
 import { FunctionComponent, ReactNode } from 'react'
 
 export type WrapperFunctionComponent<P = {}, C = ReactNode | string> = FunctionComponent<
-  P & { children: C }
+	P & { children: C }
 >
 export type WFC<P = {}> = WrapperFunctionComponent<P>
