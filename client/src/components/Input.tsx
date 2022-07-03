@@ -1,4 +1,4 @@
-import { forwardRef, ComponentProps, FC } from 'react'
+import { forwardRef, ComponentProps } from 'react'
 import { classNames } from 'utils'
 
 interface InputProps extends ComponentProps<'input'> {
