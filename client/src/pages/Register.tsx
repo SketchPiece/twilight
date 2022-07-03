@@ -11,7 +11,6 @@ const registerSchema = yup.object({
     .required('is a required field')
     .min(4, 'is too short')
     .max(15, 'is too long'),
-
   password: yup
     .string()
     .required('is a required field')
@@ -31,8 +30,12 @@ interface FieldValues {
 
 export const Register = () => {
   const navigate = useNavigate()
-
-  const { register, handleSubmit } = useCustomForm<FieldValues>({
+  //need to get array of errors from yup
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useCustomForm<FieldValues>({
     validationSchema: registerSchema,
   })
 
@@ -41,10 +44,30 @@ export const Register = () => {
   return (
     <AuthLayout onSubmit={handleSubmit(onSubmit)}>
       <span className="text-2xl font-bold mx-auto text-white">Register</span>
-      <Input label="Nickname" {...register('nickname')} />
-      <Input type="password" label="Password" {...register('password')} />
-      <Input type="password" label="Confirm password" {...register('passwordConfirm')} />
-      <Button type="submit">I'm excited!</Button>
+      <Input
+        autoFocus
+        label="Nickname"
+        autoComplete="nickname"
+        dataCy="nickname"
+        {...register('nickname')}
+      />
+      <Input
+        label="Password"
+        autoComplete="password"
+        type="password"
+        dataCy="password"
+        {...register('password')}
+      />
+      <Input
+        label="Confirm password"
+        type="password"
+        autoComplete="password"
+        dataCy="passwordConfirm"
+        {...register('passwordConfirm')}
+      />
+      <Button disabled={!!Object.keys(errors).length} dataCy="submit">
+        I'm excited!
+      </Button>
       <div className="text-gray text-sm mx-auto">
         Already have an account?
         <span

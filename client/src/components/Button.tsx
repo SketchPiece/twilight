@@ -1,15 +1,21 @@
 import { ComponentProps } from 'react'
 import { classNames, WFC } from 'utils'
 
-export const Button: WFC<ComponentProps<'button'>> = ({ children, disabled, ...rest }) => {
-  console.log(rest)
+interface ButtonProps extends ComponentProps<'button'> {
+  dataCy?: string
+}
+
+export const Button: WFC<ButtonProps> = ({ children, disabled, dataCy, ...rest }) => {
   return (
     <button
       disabled={disabled}
+      data-cy={dataCy}
       {...rest}
       className={classNames(
         'rounded-xl text-white p-2 font-bold',
-        disabled ? 'bg-purple/40' : 'bg-purple hover:bg-purple-hover transition delay-75'
+        disabled
+          ? 'bg-purple/40'
+          : 'bg-purple hover:bg-purple-hover transition delay-75 focus:outline-0'
       )}>
       {children}
     </button>

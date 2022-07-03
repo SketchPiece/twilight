@@ -26,7 +26,11 @@ interface FieldValues {
 export const Login = () => {
   const navigate = useNavigate()
 
-  const { register, handleSubmit } = useCustomForm<FieldValues>({ validationSchema: loginSchema })
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useCustomForm<FieldValues>({ validationSchema: loginSchema })
 
   const onLogin = (data: FieldValues) => console.log(data)
 
@@ -34,9 +38,17 @@ export const Login = () => {
     <AuthLayout onSubmit={handleSubmit(onLogin)}>
       <span className="text-2xl font-bold mx-auto text-white">Welcome to</span>
       <TwilightLogo className="mx-auto" />
-      <Input label="Nickname" data-cy="nickname-input" {...register('nickname')} />
-      <Input label="Password" data-cy="password-input" {...register('password')} />
-      <Button data-cy="submit">Let's go</Button>
+      <Input
+        autoFocus
+        label="Nickname"
+        autoComplete="nickname"
+        dataCy="nickname"
+        {...register('nickname')}
+      />
+      <Input label="Password" autoComplete="password" dataCy="password" {...register('password')} />
+      <Button disabled={!!Object.keys(errors).length} dataCy="submit">
+        Let's go
+      </Button>
       <div className="text-gray text-sm mx-auto">
         Need an account?
         <span

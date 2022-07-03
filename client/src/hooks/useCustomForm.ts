@@ -36,7 +36,7 @@ export const useCustomForm = <
   })
   const customRegister: UseFormCustomRegister<TFieldValues> = (...args) => {
     const error = values.formState.errors[args[0]]?.message as string | undefined
-    return { ...values.register(...args), error, 'error-cy': args[0] + '-error' }
+    return { ...values.register(...args), error }
   }
 
   return { ...values, register: customRegister }
