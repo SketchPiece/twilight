@@ -10,7 +10,7 @@ import { ValidationPipeProvider, AccessTokenGuardProvider } from './common/provi
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: path.join(__dirname, '..', 'client'),
+      rootPath: path.join(__dirname, '..', 'client', 'dist'),
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
