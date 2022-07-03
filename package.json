@@ -21,7 +21,12 @@
     "test:watch": "dotenv -e .env.test -- jest -i --no-cache --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "client:install": "npm install --prefix client",
+    "client:start": "npm run start --prefix client",
+    "client:build": "npm run build --prefix client",
+    "prune:client:dependencies": "rm -rf client/node_modules",
+    "heroku-prebuild": "npm run client:install && npm run client:build && npm run prune:client:dependencies"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
