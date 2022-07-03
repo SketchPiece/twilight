@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 html {
-  font-family: 'Poppins', sans-serif;
+	font-family: 'Poppins', sans-serif;
 }
 
 @layer {
-  .auth-background {
-    background: no-repeat center 100% url('/src/assets/auth-background.png');
-    height: 100vh;
-  }
+	.auth-background {
+		background: no-repeat center 100% url('/src/assets/auth-background.png');
+		height: 100vh;
+	}
 
-  .auth-modal-box-shadow {
-    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.25);
-  }
+	.auth-modal-box-shadow {
+		box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.25);
+	}
 }
