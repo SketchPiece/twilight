@@ -2,7 +2,7 @@ import AuthLayout from 'components/Layouts/AuthLayout'
 import { useNavigate } from 'react-router-dom'
 import { SubmitHandler } from 'react-hook-form'
 import * as yup from 'yup'
-import { useErrorForm } from 'hooks'
+import { useCustomForm } from 'hooks'
 import { Button, Input } from 'components'
 
 const registerSchema = yup.object({
@@ -20,7 +20,7 @@ const registerSchema = yup.object({
     .oneOf([yup.ref('password'), null], 'should be the same as password'),
 })
 
-interface Inputs {
+interface FieldValues {
   nickname: string
   password: string
   passwordConfirm: string
@@ -29,12 +29,11 @@ interface Inputs {
 export const Register = () => {
   const navigate = useNavigate()
 
-  const { register, handleSubmit } = useErrorForm<Inputs>(registerSchema)
+  const { register, handleSubmit } = useCustomForm<FieldValues>({
+    validationSchema: registerSchema,
+  })
 
-  const onSubmit: SubmitHandler<Inputs> = data =>
-    console.log('validation is passed, data is: ', data)
-
-  const goToLogin = () => navigate('/login')
+  const onSubmit = (data: FieldValues) => console.log(data)
 
   return (
     <AuthLayout onSubmit={handleSubmit(onSubmit)}>
@@ -45,7 +44,7 @@ export const Register = () => {
       <Button type="submit">I'm excited!</Button>
       <div className="text-gray text-sm mx-auto">
         Already have an account?
-        <span className="text-light-blue cursor-pointer" onClick={goToLogin}>
+        <span className="text-light-blue cursor-pointer" onClick={() => navigate('/login')}>
           {' '}
           Login
         </span>
