@@ -1,85 +1,111 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
+import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { AuthDto } from './dto'
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
 import { Tokens } from './types'
+import { ConfigService } from '@nestjs/config'
+import { EnvironmentVariables } from 'src/env'
+import { AuthResponseDto } from './types'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
+import { PrismaErrorCode } from 'src/common/utils/prisma.error.code'
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+    private configService: ConfigService<EnvironmentVariables>
+  ) {}
 
-  async register(dto: AuthDto): Promise<Tokens> {
-    const hash = await this.hashData(dto.password)
-    const newUser = await this.prisma.user.create({
-      data: {
-        nickname: dto.nickname,
-        hash,
-      },
-    })
+  async register(dto: AuthDto): Promise<AuthResponseDto> {
+    const passwordHash = await this.hashData(dto.password)
+    const newUser = await this.prisma.user
+      .create({
+        data: {
+          nickname: dto.nickname,
+          passwordHash,
+        },
+      })
+      .catch(error => {
+        if (error instanceof PrismaClientKnownRequestError) {
+          if (error.code === PrismaErrorCode.DUPLICATE)
+            throw new ConflictException('User already exist')
+        }
+        throw error
+      })
 
     const tokens = await this.getTokens(newUser.id, newUser.nickname)
-    await this.updateRtHash(newUser.id, tokens.refresh_token)
-    return tokens
+    await this.updateRefreshTokenHash(newUser.id, tokens.refresh_token)
+    return {
+      userId: newUser.id,
+      nickname: newUser.nickname,
+      avatarUrl: newUser.avatarUrl,
+      ...tokens,
+    }
   }
 
-  async login(dto: AuthDto): Promise<Tokens> {
+  async login(dto: AuthDto): Promise<AuthResponseDto> {
     const user = await this.prisma.user.findUnique({
       where: {
         nickname: dto.nickname,
       },
     })
 
-    if (!user) throw new ForbiddenException('Access Denied')
+    if (!user) throw new ForbiddenException('Wrong credentials')
 
-    const passwordMatches = await bcrypt.compare(dto.password, user.hash)
-    if (!passwordMatches) throw new ForbiddenException('Access Denied')
+    const passwordMatches = await bcrypt.compare(dto.password, user.passwordHash)
+    if (!passwordMatches) throw new ForbiddenException('Wrong credentials')
 
     const tokens = await this.getTokens(user.id, user.nickname)
-    await this.updateRtHash(user.id, tokens.refresh_token)
-    return tokens
+    await this.updateRefreshTokenHash(user.id, tokens.refresh_token)
+    return {
+      userId: user.id,
+      nickname: user.nickname,
+      avatarUrl: user.avatarUrl,
+      ...tokens,
+    }
   }
 
-  async logout(userId: number) {
+  async logout(userId: string) {
     await this.prisma.user.updateMany({
       where: {
         id: userId,
-        hashedRt: {
+        refreshTokenHash: {
           not: null,
         },
       },
       data: {
-        hashedRt: null,
+        refreshTokenHash: null,
       },
     })
-    return
   }
 
-  async refreshTokens(userId: number, rt: string) {
+  async refreshTokens(userId: string, refreshToken: string) {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
       },
     })
 
-    if (!user || !user.hashedRt) throw new ForbiddenException('Access Denied')
+    if (!user || !user.refreshTokenHash) throw new ForbiddenException('Access Denied')
 
-    const rtMatches = await bcrypt.compare(rt, user.hashedRt)
+    const rtMatches = await bcrypt.compare(refreshToken, user.refreshTokenHash)
     if (!rtMatches) throw new ForbiddenException('Access Denied')
 
     const tokens = await this.getTokens(user.id, user.nickname)
-    await this.updateRtHash(user.id, tokens.refresh_token)
+    await this.updateRefreshTokenHash(user.id, tokens.refresh_token)
     return tokens
   }
 
-  async updateRtHash(userId: number, rt: string) {
-    const hash = await this.hashData(rt)
+  async updateRefreshTokenHash(userId: string, refreshToken: string) {
+    const refreshTokenHash = await this.hashData(refreshToken)
     await this.prisma.user.update({
       where: {
         id: userId,
       },
       data: {
-        hashedRt: hash,
+        refreshTokenHash,
       },
     })
   }
@@ -88,16 +114,16 @@ export class AuthService {
     return bcrypt.hash(data, 10)
   }
 
-  async getTokens(userId: number, nickname: string): Promise<Tokens> {
-    const [at, rt] = await Promise.all([
+  async getTokens(userId: string, nickname: string): Promise<Tokens> {
+    const [access, refresh] = await Promise.all([
       this.jwtService.signAsync(
         {
           sub: userId,
           nickname,
         },
         {
-          secret: 'at-secret',
-          expiresIn: 60 * 15,
+          secret: this.configService.get('ACCESS_TOKEN_SECRET'),
+          expiresIn: this.configService.get('ACCESS_TOKEN_EXPIRATION'),
         }
       ),
       this.jwtService.signAsync(
@@ -106,14 +132,14 @@ export class AuthService {
           nickname,
         },
         {
-          secret: 'rt-secret',
-          expiresIn: 60 * 60 * 24 * 7,
+          secret: this.configService.get('REFRESH_TOKEN_SECRET'),
+          expiresIn: this.configService.get('REFRESH_TOKEN_EXPIRATION'),
         }
       ),
     ])
     return {
-      access_token: at,
-      refresh_token: rt,
+      access_token: access,
+      refresh_token: refresh,
     }
   }
 }

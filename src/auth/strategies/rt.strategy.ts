@@ -1,14 +1,16 @@
 import { Injectable } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { PassportStrategy } from '@nestjs/passport'
 import { Request } from 'express'
 import { ExtractJwt, Strategy } from 'passport-jwt'
+import { EnvironmentVariables } from 'src/env'
 
 @Injectable()
 export class RtStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
-  constructor() {
+  constructor(configService: ConfigService<EnvironmentVariables>) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'rt-secret',
+      secretOrKey: configService.get('REFRESH_TOKEN_SECRET'),
       passReqToCallback: true,
     })
   }

@@ -11,13 +11,14 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id String @id @default(cuid())
 
-  nickname String  @unique
-  hash     String
-  hashedRt String?
+  nickname         String  @unique
+  passwordHash     String
+  avatarUrl        String?
+  refreshTokenHash String?
 
+  updated DateTime @updatedAt
+  created DateTime @default(now())
   @@map("users")
 }

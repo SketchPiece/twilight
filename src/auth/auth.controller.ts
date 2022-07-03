@@ -1,11 +1,20 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common'
+import {
+  ApiBadRequestResponse,
+  ApiConflictResponse,
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger'
 
 import { GetCurrentUser, GetCurrentUserId, Public } from 'src/common/decorators'
-import { RtGuard } from 'src/common/guards'
+import { RefreshTokenGuard } from 'src/common/guards'
 import { AuthService } from './auth.service'
 import { AuthDto } from './dto'
-import { Tokens } from './types'
-
+import { TokensDto } from './dto/tokens.dto'
+import { AuthResponseDto } from './types'
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -13,29 +22,49 @@ export class AuthController {
   @Public()
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  register(@Body() dto: AuthDto): Promise<Tokens> {
+  @ApiCreatedResponse({
+    description: 'The user has been successfully registered',
+    type: AuthResponseDto,
+  })
+  @ApiConflictResponse({
+    description: 'The user with this nickname already exist',
+  })
+  @ApiBadRequestResponse({
+    description: 'Some fields have an error',
+  })
+  register(@Body() dto: AuthDto): Promise<AuthResponseDto> {
     return this.authService.register(dto)
   }
 
   @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  login(@Body() dto: AuthDto): Promise<Tokens> {
+  @ApiOkResponse({
+    description: 'The user has been successfully logged in',
+    type: AuthResponseDto,
+  })
+  login(@Body() dto: AuthDto): Promise<AuthResponseDto> {
     return this.authService.login(dto)
   }
 
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  logout(@GetCurrentUserId() userId: number) {
+  @ApiOkResponse({ description: 'The user logged out successfully' })
+  @ApiForbiddenResponse()
+  logout(@GetCurrentUserId() userId: string) {
     return this.authService.logout(userId)
   }
 
   @Public()
-  @UseGuards(RtGuard)
+  @UseGuards(RefreshTokenGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({
+    type: TokensDto,
+  })
+  @ApiForbiddenResponse()
   refreshTokens(
-    @GetCurrentUserId() userId: number,
+    @GetCurrentUserId() userId: string,
     @GetCurrentUser('refreshToken') refreshToken: string
   ) {
     return this.authService.refreshTokens(userId, refreshToken)
