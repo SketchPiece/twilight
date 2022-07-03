@@ -7,6 +7,18 @@ on:
   pull_request:
     branches: [main]
 jobs:
+  client:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v4
+        with:
+          build: npm run build
+          start: npm run preview
   backend:
     runs-on: ubuntu-latest
     steps:
