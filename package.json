@@ -22,7 +22,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "migrate": "prisma migrate deploy",
+    "migrate": "npx prisma migrate deploy",
     "client:install": "npm install --prefix client",
     "client:start": "npm run start --prefix client",
     "client:build": "npm run build --prefix client",
