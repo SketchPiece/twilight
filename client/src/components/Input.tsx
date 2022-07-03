@@ -31,10 +31,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 					</div>
 				)}
 				<input
-					{...rest}
 					data-cy={dataCy + '-input'}
 					ref={ref}
-					className="rounded-xl bg-deep-dark p-3 text-white text-xs focus:outline-0"
+					className="rounded-xl bg-deep-dark p-3 text-white font-bold text-xs focus:outline-0"
+					{...rest}
 				/>
 			</div>
 		)
