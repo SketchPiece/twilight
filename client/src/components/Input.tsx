@@ -5,10 +5,12 @@ interface InputProps extends ComponentProps<'input'> {
 	label?: string
 	error?: string
 	dataCy?: string
+	iconPosition?: 'left' | 'right'
+	icon?: React.ReactNode
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-	({ label, error, dataCy, ...rest }, ref) => {
+	({ label, error, dataCy, icon, iconPosition = 'left', ...rest }, ref) => {
 		return (
 			<div className="flex flex-col">
 				{(label || error) && (
@@ -30,12 +32,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 						)}
 					</div>
 				)}
-				<input
-					data-cy={dataCy + '-input'}
-					ref={ref}
-					className="rounded-xl bg-deep-dark p-3 text-white font-bold text-xs focus:outline-0"
-					{...rest}
-				/>
+				<div className="relative">
+					{icon}
+					<input
+						data-cy={dataCy + '-input'}
+						ref={ref}
+						className={classNames(
+							'w-full rounded-xl bg-deep-dark p-3 text-white font-bold text-xs focus:outline-0 placeholder:text-oslo-gray placeholder:text-bold',
+							icon ? (iconPosition === 'left' ? '  pl-11' : ' pr-11') : ''
+						)}
+						{...rest}
+					/>
+				</div>
 			</div>
 		)
 	}

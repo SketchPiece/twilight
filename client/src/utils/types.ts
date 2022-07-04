@@ -5,3 +5,5 @@ export type WrapperFunctionComponent<P = {}, C = ReactNode | string> = FunctionC
 	P & { children: C }
 >
 export type WFC<P = {}> = WrapperFunctionComponent<P>
+
+export type UserStatus = 'online' | 'idle' | 'busy' | 'invisible'
