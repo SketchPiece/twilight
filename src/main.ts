@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
+import { AuthIoAdapter } from './adapters/AuthIoAdapter'
 import { AppModule } from './app.module'
 
 async function bootstrap() {
@@ -12,6 +13,8 @@ async function bootstrap() {
     .build()
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api', app, document)
+
+  app.useWebSocketAdapter(new AuthIoAdapter(app))
 
   const PORT = process.env.PORT || 4000
 
