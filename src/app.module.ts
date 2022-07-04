@@ -6,6 +6,7 @@ import { PrismaModule } from './prisma/prisma.module'
 import * as path from 'path'
 import { ConfigModule } from '@nestjs/config'
 import { ValidationPipeProvider, AccessTokenGuardProvider } from './common/providers'
+import { ConnectionModule } from './connection/connection.module'
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ValidationPipeProvider, AccessTokenGuardProvider } from './common/provi
     AuthModule,
     UsersModule,
     PrismaModule,
+    ConnectionModule,
   ],
   providers: [AccessTokenGuardProvider, ValidationPipeProvider],
 })
