@@ -4,6 +4,9 @@ import { ReactComponent as TwilightLogo } from '../assets/twilight-logo.svg'
 import * as yup from 'yup'
 import { useCustomForm } from 'hooks'
 import { Input } from 'components'
+import { useAppDispatch, useAppSelector } from 'store/hooks'
+import { AuthData, checkAuth, authSelector, login } from 'store/user'
+import { useEffect } from 'react'
 
 const loginSchema = yup.object({
 	nickname: yup
@@ -25,10 +28,16 @@ interface FieldValues {
 
 export const Login = () => {
 	const navigate = useNavigate()
+	const dispatch = useAppDispatch()
+	const isAuth = useAppSelector(authSelector)
 
-	const { register, handleSubmit } = useCustomForm<FieldValues>({ validationSchema: loginSchema })
+	const { register, handleSubmit } = useCustomForm<AuthData>({ validationSchema: loginSchema })
 
-	const onLogin = (data: FieldValues) => console.log(data)
+	const onLogin = (data: AuthData) => dispatch(login(data))
+
+	useEffect(() => {
+		if (isAuth) navigate('/chat')
+	}, [isAuth])
 
 	return (
 		<AuthLayout>
