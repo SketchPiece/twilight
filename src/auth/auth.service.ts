@@ -38,9 +38,11 @@ export class AuthService {
     const tokens = await this.getTokens(newUser.id, newUser.nickname)
     await this.updateRefreshTokenHash(newUser.id, tokens.refresh_token)
     return {
-      userId: newUser.id,
-      nickname: newUser.nickname,
-      avatarUrl: newUser.avatarUrl,
+      user: {
+        userId: newUser.id,
+        nickname: newUser.nickname,
+        avatarUrl: newUser.avatarUrl,
+      },
       ...tokens,
     }
   }
@@ -60,9 +62,11 @@ export class AuthService {
     const tokens = await this.getTokens(user.id, user.nickname)
     await this.updateRefreshTokenHash(user.id, tokens.refresh_token)
     return {
-      userId: user.id,
-      nickname: user.nickname,
-      avatarUrl: user.avatarUrl,
+      user: {
+        userId: user.id,
+        nickname: user.nickname,
+        avatarUrl: user.avatarUrl,
+      },
       ...tokens,
     }
   }

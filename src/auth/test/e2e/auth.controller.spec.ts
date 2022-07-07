@@ -24,8 +24,10 @@ describe('AuthController (e2e)', () => {
         .expect(201)
       expect(response.body).toEqual(
         expect.objectContaining({
-          userId: expect.any(String),
-          nickname: userStub().nickname,
+          user: expect.objectContaining({
+            userId: expect.any(String),
+            nickname: userStub().nickname,
+          }),
           access_token: expect.any(String),
           refresh_token: expect.any(String),
         })
@@ -63,8 +65,10 @@ describe('AuthController (e2e)', () => {
         .expect(200)
       expect(response.body).toEqual(
         expect.objectContaining({
-          userId: expect.any(String),
-          nickname: userStub().nickname,
+          user: expect.objectContaining({
+            userId: expect.any(String),
+            nickname: userStub().nickname,
+          }),
           access_token: expect.any(String),
           refresh_token: expect.any(String),
         })
