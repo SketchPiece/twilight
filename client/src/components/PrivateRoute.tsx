@@ -1,11 +1,17 @@
 import { FC, ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
+import { selectUser } from 'store/auth'
+import { useAppSelector } from 'store/hooks'
+
 interface PrivateRouteProps {
 	element: ReactNode
-	isAuth: boolean
+	replace?: string
 }
 
-export const PrivateRoute: FC<PrivateRouteProps> = ({ element, isAuth }) => {
-	if (!isAuth) return <Navigate to="/login" replace />
+export const PrivateRoute: FC<PrivateRouteProps> = ({ element, replace = '/login' }) => {
+	const user = useAppSelector(selectUser)
+
+	if (!user) return <Navigate to={replace} replace />
+
 	return <>{element}</>
 }

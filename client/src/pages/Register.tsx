@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 import { useCustomForm } from 'hooks'
 import { Input } from 'components'
-import { useAppDispatch, useAppSelector } from 'store/hooks'
-import { AuthData, authSelector, registration } from 'store/user'
-import { useEffect } from 'react'
+import { useAppDispatch } from 'store/hooks'
+import { register as registerAction } from 'store/auth'
 
 const registerSchema = yup.object({
 	nickname: yup
@@ -24,25 +23,21 @@ const registerSchema = yup.object({
 		.oneOf([yup.ref('password'), null], 'should be the same as password'),
 })
 
-interface FieldValues extends AuthData {
+interface FieldValues {
+	nickname: string
+	password: string
 	passwordConfirm: string
 }
 
 export const Register = () => {
 	const navigate = useNavigate()
-
 	const dispatch = useAppDispatch()
-	const isAuth = useAppSelector(authSelector)
 
-	const onRegister = (data: FieldValues) => dispatch(registration(data))
+	const onRegister = (data: FieldValues) => dispatch(registerAction(data))
 
 	const { register, handleSubmit } = useCustomForm<FieldValues>({
 		validationSchema: registerSchema,
 	})
-
-	useEffect(() => {
-		if (isAuth) navigate('/chat')
-	}, [isAuth])
 
 	return (
 		<AuthLayout>
