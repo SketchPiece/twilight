@@ -9,8 +9,8 @@ const App = () => {
 	return (
 		<Routes>
 			<Route index element={<PrivateRoute element={<Home />} />} />
-			<Route path="login" element={<PublicRoute element={<Login />} />} />
-			<Route path="register" element={<PublicRoute element={<Register />} />} />
+			<Route path="login" element={<PublicRoute element={<Login />} restricted />} />
+			<Route path="register" element={<PublicRoute element={<Register />} restricted />} />
 		</Routes>
 	)
 }
