@@ -4,6 +4,8 @@ import { ReactComponent as TwilightLogo } from '../assets/twilight-logo.svg'
 import * as yup from 'yup'
 import { useCustomForm } from 'hooks'
 import { Input } from 'components'
+import { useAppDispatch } from 'store/hooks'
+import { login } from 'store/auth'
 
 const loginSchema = yup.object({
 	nickname: yup
@@ -25,10 +27,11 @@ interface FieldValues {
 
 export const Login = () => {
 	const navigate = useNavigate()
+	const dispatch = useAppDispatch()
 
 	const { register, handleSubmit } = useCustomForm<FieldValues>({ validationSchema: loginSchema })
 
-	const onLogin = (data: FieldValues) => console.log(data)
+	const onLogin = (data: FieldValues) => dispatch(login(data))
 
 	return (
 		<AuthLayout>
@@ -44,6 +47,7 @@ export const Login = () => {
 				/>
 				<Input
 					label="Password"
+					type="password"
 					autoComplete="password"
 					dataCy="password"
 					{...register('password')}

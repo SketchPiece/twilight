@@ -1,3 +1,4 @@
+import { PrivateRoute } from 'components/PrivateRoute'
 import { PublicRoute } from 'components/PublicRoute'
 import Chat from 'pages/Chat'
 import Login from 'pages/Login'
@@ -7,11 +8,9 @@ import { Route, Routes } from 'react-router-dom'
 const App = () => {
 	return (
 		<Routes>
-			{/* <Route index element={<PrivateRoute element={<Chat />} />} /> */}
-			<Route path="chat" element={<PublicRoute element={<Chat />} />} />
-
-			<Route path="login" element={<PublicRoute element={<Login />} />} />
-			<Route path="register" element={<PublicRoute element={<Register />} />} />
+			<Route index element={<PrivateRoute element={<Chat />} />} />
+			<Route path="login" element={<PublicRoute element={<Login />} restricted />} />
+			<Route path="register" element={<PublicRoute element={<Register />} restricted />} />
 		</Routes>
 	)
 }

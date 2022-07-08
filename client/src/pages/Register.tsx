@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 import { useCustomForm } from 'hooks'
 import { Input } from 'components'
+import { useAppDispatch } from 'store/hooks'
+import { register as registerAction } from 'store/auth'
 
 const registerSchema = yup.object({
 	nickname: yup
@@ -29,12 +31,13 @@ interface FieldValues {
 
 export const Register = () => {
 	const navigate = useNavigate()
+	const dispatch = useAppDispatch()
+
+	const onRegister = (data: FieldValues) => dispatch(registerAction(data))
 
 	const { register, handleSubmit } = useCustomForm<FieldValues>({
 		validationSchema: registerSchema,
 	})
-
-	const onRegister = (data: FieldValues) => console.log(data)
 
 	return (
 		<AuthLayout>

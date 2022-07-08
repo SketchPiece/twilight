@@ -6,16 +6,20 @@ import { PrismaModule } from './prisma/prisma.module'
 import * as path from 'path'
 import { ConfigModule } from '@nestjs/config'
 import { ValidationPipeProvider, AccessTokenGuardProvider } from './common/providers'
+import { ConnectionModule } from './connection/connection.module'
+import { MessagesModule } from './messages/messages.module'
 
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: path.join(__dirname, '..', 'client'),
+      rootPath: path.join(__dirname, '..', 'client', 'dist'),
     }),
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UsersModule,
     PrismaModule,
+    ConnectionModule,
+    MessagesModule,
   ],
   providers: [AccessTokenGuardProvider, ValidationPipeProvider],
 })

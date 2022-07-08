@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { StoreProvider } from 'easy-peasy'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import store from 'store'
 import App from './App'
 import './global.css'
+import { Provider as StoreProvider } from 'react-redux'
+import store from 'store'
 
 const Base = () => (
 	<React.StrictMode>

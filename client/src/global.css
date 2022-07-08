@@ -24,7 +24,7 @@ html {
 @layer components {
 	.auth-background {
 		@apply h-screen w-screen;
-		background: no-repeat center center / 100% url('/src/assets/auth-background.png');
+		background: no-repeat center center / cover url('/src/assets/auth-background.png');
 	}
 
 	.chat-background {
