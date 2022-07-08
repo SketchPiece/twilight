@@ -1,5 +1,4 @@
-import { PrivateRoute } from 'components/PrivateRoute'
-import { PublicRoute } from 'components/PublicRoute'
+import { PrivateRoute, PublicRoute } from 'components'
 import Chat from 'pages/Chat'
 import Login from 'pages/Login'
 import Register from 'pages/Register'

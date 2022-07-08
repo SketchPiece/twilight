@@ -10,4 +10,4 @@ const AuthLayout: WFC = ({ children }) => {
 	)
 }
 
-export default AuthLayout
+export { AuthLayout }
