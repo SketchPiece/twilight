@@ -1,6 +1,6 @@
 import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
-import { AuthDto } from './dto'
+import { RegisterDto, LoginDto } from './dto'
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt'
 import { Tokens } from './types'
@@ -8,7 +8,7 @@ import { ConfigService } from '@nestjs/config'
 import { EnvironmentVariables } from 'src/env'
 import { AuthResponseDto } from './types'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
-import { PrismaErrorCode } from 'src/common/utils/prisma.error.code'
+import { PrismaErrorCode } from 'src/common/utils'
 
 @Injectable()
 export class AuthService {
@@ -18,13 +18,14 @@ export class AuthService {
     private configService: ConfigService<EnvironmentVariables>
   ) {}
 
-  async register(dto: AuthDto): Promise<AuthResponseDto> {
+  async register(dto: RegisterDto): Promise<AuthResponseDto> {
     const passwordHash = await this.hashData(dto.password)
     const newUser = await this.prisma.user
       .create({
         data: {
           nickname: dto.nickname,
           passwordHash,
+          publicKey: dto.publicKey,
         },
       })
       .catch(error => {
@@ -47,7 +48,7 @@ export class AuthService {
     }
   }
 
-  async login(dto: AuthDto): Promise<AuthResponseDto> {
+  async login(dto: LoginDto): Promise<AuthResponseDto> {
     const user = await this.prisma.user.findUnique({
       where: {
         nickname: dto.nickname,

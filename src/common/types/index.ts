@@ -1,8 +1,3 @@
-import { Socket } from 'socket.io'
-
-export interface AuthPayload {
-  userId: string
-  nickname: string
-}
-
-export type AuthSocket = Socket & AuthPayload
+export * from './pagination.object'
+export * from './auth.payload'
+export * from './auth.socket'
