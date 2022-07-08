@@ -15,10 +15,38 @@ model User {
 
   nickname         String  @unique
   passwordHash     String
+  publicKey        String
   avatarUrl        String?
   refreshTokenHash String?
 
   updated DateTime @updatedAt
   created DateTime @default(now())
+
   @@map("users")
+}
+
+model Inbox {
+  id String @id @default(cuid())
+
+  userId   String
+  senderId String
+
+  hash         String
+  lastMessage  String
+  unseenNumber Int      @default(0)
+  updated      DateTime @updatedAt
+  created      DateTime @default(now())
+  @@map("inboxes")
+}
+
+model Message {
+  id String @id @default(cuid())
+
+  senderId               String
+  senderEncryptedText    String
+  recipientEncryptedText String
+  inboxHash              String
+  updated                DateTime @updatedAt
+  created                DateTime @default(now())
+  @@map("messages")
 }

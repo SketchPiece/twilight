@@ -11,7 +11,7 @@ import {
 import { GetCurrentUser, GetCurrentUserId, Public } from 'src/common/decorators'
 import { RefreshTokenGuard } from 'src/common/guards'
 import { AuthService } from './auth.service'
-import { AuthDto } from './dto'
+import { RegisterDto, LoginDto } from './dto'
 import { TokensDto } from './dto/tokens.dto'
 import { AuthResponseDto } from './types'
 @ApiTags('Auth')
@@ -32,7 +32,7 @@ export class AuthController {
   @ApiBadRequestResponse({
     description: 'Some fields have an error',
   })
-  register(@Body() dto: AuthDto): Promise<AuthResponseDto> {
+  register(@Body() dto: RegisterDto): Promise<AuthResponseDto> {
     return this.authService.register(dto)
   }
 
@@ -43,7 +43,7 @@ export class AuthController {
     description: 'The user has been successfully logged in',
     type: AuthResponseDto,
   })
-  login(@Body() dto: AuthDto): Promise<AuthResponseDto> {
+  login(@Body() dto: LoginDto): Promise<AuthResponseDto> {
     return this.authService.login(dto)
   }
 

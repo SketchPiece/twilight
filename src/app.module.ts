@@ -7,6 +7,7 @@ import * as path from 'path'
 import { ConfigModule } from '@nestjs/config'
 import { ValidationPipeProvider, AccessTokenGuardProvider } from './common/providers'
 import { ConnectionModule } from './connection/connection.module'
+import { MessagesModule } from './messages/messages.module'
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ConnectionModule } from './connection/connection.module'
     UsersModule,
     PrismaModule,
     ConnectionModule,
+    MessagesModule,
   ],
   providers: [AccessTokenGuardProvider, ValidationPipeProvider],
 })

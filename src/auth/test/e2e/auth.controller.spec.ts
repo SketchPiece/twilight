@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common'
 
 import * as request from 'supertest'
 import { setupTestSuite } from 'src/test/setupTest'
-import { userStub } from '../stubs/user.stub'
+import { userStub } from '../helpers/user.stub'
 import { AuthResponseDto } from 'src/auth/types'
 
 describe('AuthController (e2e)', () => {
@@ -20,7 +20,7 @@ describe('AuthController (e2e)', () => {
     it('should register user', async () => {
       const response = await request(app.getHttpServer())
         .post('/auth/register')
-        .send(userStub())
+        .send({ ...userStub(), publicKey: 'pub' })
         .expect(201)
       expect(response.body).toEqual(
         expect.objectContaining({
@@ -34,7 +34,7 @@ describe('AuthController (e2e)', () => {
     it('should return error on already existing user', () => {
       return request(app.getHttpServer())
         .post('/auth/register')
-        .send(userStub())
+        .send({ ...userStub(), publicKey: 'pub' })
         .expect(409)
         .expect({
           statusCode: 409,
@@ -46,11 +46,11 @@ describe('AuthController (e2e)', () => {
     it('should forbid short and long nicknames', async () => {
       await request(app.getHttpServer())
         .post('/auth/register')
-        .send({ nickname: 'sht', password: 'pass' })
+        .send({ nickname: 'sht', password: 'pass', publicKey: 'pub' })
         .expect(400)
       await request(app.getHttpServer())
         .post('/auth/register')
-        .send({ nickname: 'longlonglonglong', password: 'pass' })
+        .send({ nickname: 'longlonglonglong', password: 'pass', publicKey: 'pub' })
         .expect(400)
     })
   })
