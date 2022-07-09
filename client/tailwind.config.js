@@ -14,6 +14,7 @@ module.exports = {
 				700: '#884BED',
 				600: '#8D47FF',
 			},
+			'mulled-wine': '#4B4961',
 			'purple-hover': '#5A1BC0',
 			'light-blue': '#05A5E4',
 			'light-gray': '#B0B0B0',
