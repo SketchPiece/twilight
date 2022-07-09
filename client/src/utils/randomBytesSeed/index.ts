@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { isaacCSPRNG } = require('./isaacCSPRNG-1.1')
+const isaacCSPRNG = require('./isaacCSPRNG-1.1')
 
 export default function randomBytesSeed(size: number, seed: string): Buffer {
 	const prng = isaacCSPRNG(seed)
