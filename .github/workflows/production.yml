@@ -8,6 +8,9 @@ on:
     branches: [main]
 jobs:
   client-unit:
+    defaults:
+      run:
+        working-directory: client
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
