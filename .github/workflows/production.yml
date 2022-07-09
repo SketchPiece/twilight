@@ -36,6 +36,7 @@ jobs:
           working-directory: client
           build: npm run build
           start: npm run preview
+          command: npm run test:e2e
   backend:
     runs-on: ubuntu-latest
     steps:
