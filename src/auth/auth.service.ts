@@ -43,6 +43,7 @@ export class AuthService {
         userId: newUser.id,
         nickname: newUser.nickname,
         avatarUrl: newUser.avatarUrl,
+        publicKey: newUser.publicKey,
       },
       ...tokens,
     }
@@ -67,6 +68,7 @@ export class AuthService {
         userId: user.id,
         nickname: user.nickname,
         avatarUrl: user.avatarUrl,
+        publicKey: user.publicKey,
       },
       ...tokens,
     }

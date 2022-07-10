@@ -6,7 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(pagination: PaginationObject) {
+  async findAll(pagination: PaginationObject, nickname?: string) {
     let options: any = {
       select: {
         id: true,
@@ -21,10 +21,24 @@ export class UsersService {
         take: pagination.limit,
         skip: pagination.limit * (pagination.page - 1),
       }
+    if (nickname) options = { ...options, where: { nickname: { contains: nickname } } }
     const [users, count] = await this.prisma.$transaction([
       this.prisma.user.findMany(options),
-      this.prisma.user.count(),
+      this.prisma.user.count({
+        where: options.where,
+      }),
     ])
     return { users, count }
+  }
+
+  async updatePublicKey(userId: string, publicKey: string) {
+    await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        publicKey,
+      },
+    })
   }
 }
