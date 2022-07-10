@@ -10,4 +10,7 @@ export class UserResponseDto implements UserResponse {
 
   @ApiProperty()
   avatarUrl: string | null
+
+  @ApiProperty()
+  publicKey: string | null
 }

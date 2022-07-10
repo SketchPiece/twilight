@@ -65,5 +65,25 @@ describe('UsersController (e2e)', () => {
     })
   })
 
-  // it.todo('should return user')
+  it('should search among users', async () => {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        nickname: true,
+        publicKey: true,
+        avatarUrl: true,
+      },
+      where: {
+        nickname: {
+          contains: 'user1',
+        },
+      },
+    })
+    const response = await request(app.getHttpServer())
+      .get('/users')
+      .set('Authorization', 'Bearer ' + authResponse.access_token)
+      .query({ search: 'nickname=user1' })
+      .expect(200)
+    expect(response.body).toEqual({ users, count: users.length })
+  })
 })
