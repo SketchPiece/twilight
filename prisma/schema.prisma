@@ -31,19 +31,22 @@ enum Status {
   ONLINE
   IDLE
   BUSY
+  INVISIBLE
 }
 
 model Direct {
   id String @id @default(cuid())
 
-  userId   String
-  senderId String
+  user_and_sender_id String @unique
+  userId             String
+  senderId           String
 
   hash         String
-  lastMessage  String
-  unseenNumber Int      @default(0)
-  updated      DateTime @updatedAt
-  created      DateTime @default(now())
+  unseenNumber Int    @default(0)
+
+  lastMessage String?
+  updated     DateTime @updatedAt
+  created     DateTime @default(now())
   @@map("directs")
 }
 

@@ -13,6 +13,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Twilight Api')
     .setDescription('Twilight App Api Documentation')
+    .addBasicAuth()
     .build()
   const document = SwaggerModule.createDocument(app, config)
   SwaggerModule.setup('api', app, document)
@@ -27,7 +28,6 @@ async function bootstrap() {
     .setTitle('Twilight WebSockets')
     .setDescription('Twilight App WebSockets Documentation')
     .setDefaultContentType('application/json')
-    .addSecurity('user-password', { type: 'userPassword' })
     .addServer('twilight', asyncApiServer)
     .build()
 

@@ -16,10 +16,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse()
   @ApiForbiddenResponse()
-  findAll(
-    @QueryPagination() pagination: PaginationObject,
-    @QuerySearch('nickname') nickname?: string
-  ) {
+  findAll(@QueryPagination() pagination: PaginationObject, @QuerySearch() nickname?: string) {
     return this.usersService.findAll(pagination, nickname)
   }
 
