@@ -3,7 +3,7 @@ import { INestApplication } from '@nestjs/common'
 import * as request from 'supertest'
 import { setupTestSuite } from 'src/test/setupTest'
 import { userStub } from '../helpers/user.stub'
-import { AuthResponseDto } from 'src/auth/types'
+import { AuthResponseDto } from 'src/auth/dto'
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication
