@@ -1,5 +1,4 @@
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common'
-import { Direct, Message } from '@prisma/client'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 import { hashData, PrismaErrorCode } from 'src/common/utils'
 import { ConnectionService } from 'src/connection/connection.service'

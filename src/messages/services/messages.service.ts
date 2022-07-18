@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common'
-import { WsException } from '@nestjs/websockets'
-import { hashData } from 'src/common/utils'
 import { ConnectionService } from 'src/connection/connection.service'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { PubMessageDto } from '../dto/pub.message.dto'
