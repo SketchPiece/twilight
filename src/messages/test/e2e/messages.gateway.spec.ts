@@ -13,14 +13,12 @@ describe('MessagesGateway (e2e)', () => {
   const GATEWAY_URL = `ws://localhost:${PORT}`
   let app: INestApplication
   let users: [AuthResponseDto, AuthResponseDto]
-  let prisma: PrismaService
   let user1Client: Socket
   let user2Client: Socket
   let directHash: string
 
   beforeAll(async () => {
-    const [moduleRef, prismaDB] = await setupTestSuite()
-    prisma = prismaDB
+    const [moduleRef] = await setupTestSuite()
 
     app = moduleRef.createNestApplication()
     app.useWebSocketAdapter(new AuthIoAdapter(app))
@@ -39,6 +37,8 @@ describe('MessagesGateway (e2e)', () => {
 
   afterAll(async () => {
     await app.close()
+    user1Client.close()
+    user2Client.close()
   })
 
   it('should send message and direct to user after direct creation', async done => {
