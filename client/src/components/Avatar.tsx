@@ -20,13 +20,14 @@ export const Avatar: FC<AvatarProps> = ({ status, onClick, src, nickname = 'N/A'
 		/>
 	) : (
 		<div
+			draggable
 			className={classNames(
 				'avatar avatar-placeholder uppercase flex items-center justify-center text-2xl',
 				onClick && 'cursor-pointer',
 				status && 'avatar-border-' + status
 			)}
 		>
-			{nickname[0]}
+			<span className="select-none">{nickname[0]}</span>
 		</div>
 	)
 }

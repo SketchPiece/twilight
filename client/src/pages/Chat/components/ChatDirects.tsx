@@ -1,26 +1,20 @@
 import { Input } from 'components'
-import { useCallback, useState } from 'react'
+import { ChangeEvent, useCallback, useState } from 'react'
 import services from 'services'
 import { ChatDirect } from '.'
 import { ReactComponent as SearchIcon } from '../../../assets/search.svg'
 import debounce from 'lodash/debounce'
-
-interface SearchUser {
-	avatarUrl: null | string
-	id: string
-	nickname: string
-	publicKey: string
-}
+import { SearchedUser } from 'services/utils'
 
 export const ChatDirects = () => {
 	const [search, setSearch] = useState<string>('')
 	const [directs, setDirects] = useState<any[]>([])
-	const [searchedUsers, setSearchedUsers] = useState<SearchUser[]>([])
+	const [searchedUsers, setSearchedUsers] = useState<SearchedUser[]>([])
 	const [searchedCount, setSearchedCount] = useState<number>(0)
 	const [loading, setLoading] = useState<boolean>(false)
 
 	const debouncedGetUsers = useCallback(
-		debounce(async searchText => {
+		debounce(async (searchText: string) => {
 			const res = await services.user.getUsers({ page: 0, limit: 10, search: searchText })
 			setSearchedUsers(res.users)
 			setSearchedCount(res.count)
@@ -29,10 +23,15 @@ export const ChatDirects = () => {
 		[]
 	)
 
-	const onSearchChange = async (e: any) => {
+	const onSearchChange = async (e: ChangeEvent<HTMLInputElement>) => {
+		const searchText = e.target.value
+		setSearch(searchText)
+		if (!searchText) {
+			debouncedGetUsers.cancel()
+			return setLoading(false)
+		}
 		setLoading(true)
-		setSearch(e.target.value)
-		debouncedGetUsers(search)
+		debouncedGetUsers(searchText)
 	}
 
 	return (
@@ -52,7 +51,9 @@ export const ChatDirects = () => {
 				{loading ? (
 					<>loading...</> // loading case for both directs and searched users
 				) : search.length ? ( // if search is not empty we sholud display searched users, otherwise display directs
-					searchedUsers?.map((user, i) => <ChatDirect nickname={user.nickname} key={i} />)
+					searchedUsers?.map((user, i) => (
+						<ChatDirect nickname={user.nickname} avatarUrl={user.avatarUrl} key={i} />
+					))
 				) : (
 					directs.map((direct, i) => (
 						<ChatDirect
