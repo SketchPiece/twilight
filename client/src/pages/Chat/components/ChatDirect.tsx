@@ -7,7 +7,7 @@ interface ChatDirectProps {
 	selected?: boolean
 	unseenNumber?: number
 	lastMessage?: string
-	avatarUrl?: string
+	avatarUrl: string | null
 	status?: UserStatus
 	onClick?: (nickname: string) => void
 }
@@ -34,7 +34,7 @@ export const ChatDirect: FC<ChatDirectProps> = ({
 			)}
 		>
 			<div className="flex gap-5 items-center">
-				<Avatar status={status} src={avatarUrl} nickname={nickname} />
+				<Avatar status={status} src={avatarUrl ? avatarUrl : undefined} nickname={nickname} />
 				<div>
 					<div className="text-white font-bold">{nickname}</div>
 					<div className="text-light-gray text-xs">{lastMessage}</div>
