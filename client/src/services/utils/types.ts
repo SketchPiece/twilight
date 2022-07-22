@@ -12,3 +12,15 @@ export interface TokensResponse {
 export interface AuthResponse extends TokensResponse {
 	user: User
 }
+
+export interface SearchedUser {
+	avatarUrl: null | string
+	id: string
+	nickname: string
+	publicKey: string | null
+}
+
+export interface SearchedUsersResponse {
+	count: number
+	users: SearchedUser[]
+}

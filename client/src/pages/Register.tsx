@@ -1,4 +1,4 @@
-import AuthLayout from 'components/Layouts/AuthLayout'
+import { AuthLayout } from 'components/Layouts'
 import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 import { useCustomForm } from 'hooks'

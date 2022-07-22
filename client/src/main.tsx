@@ -4,17 +4,16 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import './global.css'
-
-import { Provider } from 'react-redux'
-import { store } from 'store'
+import { Provider as StoreProvider } from 'react-redux'
+import store from 'store'
 
 const Base = () => (
 	<React.StrictMode>
-		<Provider store={store}>
+		<StoreProvider store={store}>
 			<BrowserRouter>
 				<App />
 			</BrowserRouter>
-		</Provider>
+		</StoreProvider>
 	</React.StrictMode>
 )
 
