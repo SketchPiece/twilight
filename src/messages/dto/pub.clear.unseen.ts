@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
-export class PubMessageDto {
-  @ApiProperty()
-  message: string
-
+export class PubClearUnseenDto {
   @ApiProperty()
   directHash: string
 }

@@ -1,6 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiForbiddenResponse,
@@ -47,6 +48,7 @@ export class AuthController {
   }
 
   @Post('logout')
+  @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: 'The user logged out successfully' })
   @ApiForbiddenResponse()
@@ -56,6 +58,7 @@ export class AuthController {
 
   @Public()
   @UseGuards(RefreshTokenGuard)
+  @ApiBearerAuth()
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({

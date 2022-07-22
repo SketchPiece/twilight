@@ -3,6 +3,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
 import { hashData, PrismaErrorCode } from 'src/common/utils'
 import { ConnectionService } from 'src/connection/connection.service'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { directSelect } from '../common'
 
 @Injectable()
 export class DirectsService {
@@ -20,6 +21,7 @@ export class DirectsService {
         orderBy: {
           updated: 'desc',
         },
+        select: directSelect,
       }),
       this.prisma.direct.count({
         where: {
@@ -71,6 +73,7 @@ export class DirectsService {
             lastMessage: firstMessage,
             hash,
           },
+          select: directSelect,
         }),
         this.prisma.direct.create({
           data: {
@@ -81,6 +84,7 @@ export class DirectsService {
             lastMessage: firstMessage,
             hash,
           },
+          select: directSelect,
         }),
       ])
 

@@ -11,6 +11,7 @@ export class UsersService {
       select: {
         id: true,
         nickname: true,
+        status: true,
         publicKey: true,
         avatarUrl: true,
       },
