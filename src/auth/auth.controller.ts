@@ -1,6 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common'
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiForbiddenResponse,
@@ -11,9 +12,8 @@ import {
 import { GetCurrentUser, GetCurrentUserId, Public } from 'src/common/decorators'
 import { RefreshTokenGuard } from 'src/common/guards'
 import { AuthService } from './auth.service'
-import { RegisterDto, LoginDto } from './dto'
-import { TokensDto } from './dto/tokens.dto'
-import { AuthResponseDto } from './types'
+import { AuthDto, TokensDto, AuthResponseDto } from './dto'
+
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -32,7 +32,7 @@ export class AuthController {
   @ApiBadRequestResponse({
     description: 'Some fields have an error',
   })
-  register(@Body() dto: RegisterDto): Promise<AuthResponseDto> {
+  register(@Body() dto: AuthDto): Promise<AuthResponseDto> {
     return this.authService.register(dto)
   }
 
@@ -43,11 +43,12 @@ export class AuthController {
     description: 'The user has been successfully logged in',
     type: AuthResponseDto,
   })
-  login(@Body() dto: LoginDto): Promise<AuthResponseDto> {
+  login(@Body() dto: AuthDto): Promise<AuthResponseDto> {
     return this.authService.login(dto)
   }
 
   @Post('logout')
+  @ApiBearerAuth()
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: 'The user logged out successfully' })
   @ApiForbiddenResponse()
@@ -57,6 +58,7 @@ export class AuthController {
 
   @Public()
   @UseGuards(RefreshTokenGuard)
+  @ApiBearerAuth()
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({

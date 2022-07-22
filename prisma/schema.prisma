@@ -15,7 +15,8 @@ model User {
 
   nickname         String  @unique
   passwordHash     String
-  publicKey        String
+  status           Status  @default(OFFLINE)
+  publicKey        String?
   avatarUrl        String?
   refreshTokenHash String?
 
@@ -25,28 +26,37 @@ model User {
   @@map("users")
 }
 
-model Inbox {
+enum Status {
+  OFFLINE
+  ONLINE
+  IDLE
+  BUSY
+  INVISIBLE
+}
+
+model Direct {
   id String @id @default(cuid())
 
-  userId   String
-  senderId String
+  user_and_sender_id String @unique
+  userId             String
+  senderId           String
 
   hash         String
-  lastMessage  String
-  unseenNumber Int      @default(0)
-  updated      DateTime @updatedAt
-  created      DateTime @default(now())
-  @@map("inboxes")
+  unseenNumber Int    @default(0)
+
+  lastMessage String?
+  updated     DateTime @updatedAt
+  created     DateTime @default(now())
+  @@map("directs")
 }
 
 model Message {
   id String @id @default(cuid())
 
-  senderId               String
-  senderEncryptedText    String
-  recipientEncryptedText String
-  inboxHash              String
-  updated                DateTime @updatedAt
-  created                DateTime @default(now())
+  senderId   String
+  text       String
+  directHash String
+  updated    DateTime @updatedAt
+  created    DateTime @default(now())
   @@map("messages")
 }

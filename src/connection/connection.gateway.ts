@@ -1,23 +1,24 @@
 import { Logger } from '@nestjs/common'
-import { ApiProperty } from '@nestjs/swagger'
 import {
-  ConnectedSocket,
-  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
-  SubscribeMessage,
+  OnGatewayInit,
   WebSocketGateway,
-  WebSocketServer,
 } from '@nestjs/websockets'
 import { Server } from 'socket.io'
 import { AuthSocket } from 'src/common/types'
+import { ConnectionService } from './connection.service'
 
 @WebSocketGateway()
-export class ConnectionGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class ConnectionGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   logger = new Logger(ConnectionGateway.name)
 
-  @WebSocketServer()
-  server: Server
+  constructor(private readonly connectionService: ConnectionService) {}
+
+  afterInit(server: Server) {
+    this.connectionService.server = server
+    this.logger.debug('ConnectionGateway initialized')
+  }
 
   handleConnection(client: AuthSocket) {
     client.join(client.userId)

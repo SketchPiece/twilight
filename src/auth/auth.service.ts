@@ -1,14 +1,13 @@
 import { ConflictException, ForbiddenException, Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
-import { RegisterDto, LoginDto } from './dto'
-import * as bcrypt from 'bcrypt'
+import { AuthDto, AuthResponseDto } from './dto'
 import { JwtService } from '@nestjs/jwt'
 import { Tokens } from './types'
 import { ConfigService } from '@nestjs/config'
 import { EnvironmentVariables } from 'src/env'
-import { AuthResponseDto } from './types'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime'
-import { PrismaErrorCode } from 'src/common/utils'
+import { hashData, PrismaErrorCode } from 'src/common/utils'
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class AuthService {
@@ -18,14 +17,13 @@ export class AuthService {
     private configService: ConfigService<EnvironmentVariables>
   ) {}
 
-  async register(dto: RegisterDto): Promise<AuthResponseDto> {
-    const passwordHash = await this.hashData(dto.password)
+  async register(dto: AuthDto): Promise<AuthResponseDto> {
+    const passwordHash = await hashData(dto.password)
     const newUser = await this.prisma.user
       .create({
         data: {
           nickname: dto.nickname,
           passwordHash,
-          publicKey: dto.publicKey,
         },
       })
       .catch(error => {
@@ -43,12 +41,13 @@ export class AuthService {
         userId: newUser.id,
         nickname: newUser.nickname,
         avatarUrl: newUser.avatarUrl,
+        publicKey: newUser.publicKey,
       },
       ...tokens,
     }
   }
 
-  async login(dto: LoginDto): Promise<AuthResponseDto> {
+  async login(dto: AuthDto): Promise<AuthResponseDto> {
     const user = await this.prisma.user.findUnique({
       where: {
         nickname: dto.nickname,
@@ -67,6 +66,7 @@ export class AuthService {
         userId: user.id,
         nickname: user.nickname,
         avatarUrl: user.avatarUrl,
+        publicKey: user.publicKey,
       },
       ...tokens,
     }
@@ -104,7 +104,7 @@ export class AuthService {
   }
 
   async updateRefreshTokenHash(userId: string, refreshToken: string) {
-    const refreshTokenHash = await this.hashData(refreshToken)
+    const refreshTokenHash = await hashData(refreshToken)
     await this.prisma.user.update({
       where: {
         id: userId,
@@ -113,10 +113,6 @@ export class AuthService {
         refreshTokenHash,
       },
     })
-  }
-
-  hashData(data: string) {
-    return bcrypt.hash(data, 10)
   }
 
   async getTokens(userId: string, nickname: string): Promise<Tokens> {
