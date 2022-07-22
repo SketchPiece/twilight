@@ -32,6 +32,7 @@ describe('UsersController (e2e)', () => {
         nickname: true,
         publicKey: true,
         avatarUrl: true,
+        status: true,
       },
     })
     const response = await request(app.getHttpServer())
@@ -52,6 +53,7 @@ describe('UsersController (e2e)', () => {
         nickname: true,
         publicKey: true,
         avatarUrl: true,
+        status: true,
       },
     })
     const response = await request(app.getHttpServer())
@@ -72,6 +74,7 @@ describe('UsersController (e2e)', () => {
         nickname: true,
         publicKey: true,
         avatarUrl: true,
+        status: true,
       },
       where: {
         nickname: {

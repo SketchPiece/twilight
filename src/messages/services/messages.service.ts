@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { ConnectionService } from 'src/connection/connection.service'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { directSelect } from '../common'
 import { PubMessageDto } from '../dto/pub.message.dto'
 
 @Injectable()
@@ -16,6 +17,7 @@ export class MessagesService {
         userId,
         hash: dto.directHash,
       },
+      select: directSelect,
     })
     if (!direct) throw new Error('Direct not found')
     const [message] = await this.prisma.$transaction([
@@ -55,6 +57,7 @@ export class MessagesService {
         hash: dto.directHash,
         userId: direct.senderId,
       },
+      select: directSelect,
     })
 
     this.connectionService.server.to(direct.senderId).emit('message', {
@@ -69,6 +72,7 @@ export class MessagesService {
         userId,
         hash: directHash,
       },
+      select: directSelect,
     })
     if (!direct) throw new Error('Direct not found')
     await this.prisma.direct.updateMany({
