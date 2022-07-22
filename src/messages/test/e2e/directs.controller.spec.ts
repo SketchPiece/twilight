@@ -35,7 +35,6 @@ describe('DirectsController (e2e)', () => {
         lastMessage: message,
         hash: expect.any(String),
         updated: expect.any(String),
-        created: expect.any(String),
       })
     )
     const directs = await prisma.direct.findMany()

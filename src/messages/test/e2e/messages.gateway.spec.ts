@@ -54,7 +54,6 @@ describe('MessagesGateway (e2e)', () => {
           unseenNumber: 1,
           lastMessage: message,
           updated: expect.any(String),
-          created: expect.any(String),
         }),
         message: expect.objectContaining({
           id: expect.any(String),
@@ -87,7 +86,6 @@ describe('MessagesGateway (e2e)', () => {
           unseenNumber: 1,
           lastMessage: message,
           updated: expect.any(String),
-          created: expect.any(String),
         }),
         message: expect.objectContaining({
           id: expect.any(String),
@@ -113,11 +111,11 @@ describe('MessagesGateway (e2e)', () => {
       .set('Authorization', `Bearer ${users[0].access_token}`)
       .expect(200)
     expect(response.body.directs[0].unseenNumber).toBe(1)
-    user1Client.emit('clearUnseen', async () => {
-      const response = await request(app.getHttpServer())
+    user1Client.emit('clearUnseen', { directHash: response.body.directs[0].hash }, async () => {
+      const response2 = await request(app.getHttpServer())
         .get('/directs')
         .set('Authorization', `Bearer ${users[0].access_token}`)
-      expect(response.body.directs[0].unseenNumber).toBe(0)
+      expect(response2.body.directs[0].unseenNumber).toBe(0)
       done()
     })
   })
