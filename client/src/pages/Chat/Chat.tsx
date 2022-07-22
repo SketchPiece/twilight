@@ -23,6 +23,11 @@ export const Chat = () => {
 				<ChatInput value={message} onChange={e => setMessage(e.target.value)} />
 			</div>
 			<ChatSidebar />
+			{/* <ChatContainer />
+			<Sidebar>
+				<DirectsContainer />
+				<ProfileContainer />
+			</Sidebar> */}
 		</div>
 	)
 }
