@@ -1,16 +1,18 @@
-import { ComponentProps, FC } from 'react'
+import { FC } from 'react'
 import { classNames, UserStatus } from 'utils'
 
-interface AvatarProps extends ComponentProps<'img'> {
+interface AvatarProps {
 	status?: UserStatus
 	nickname?: string
+	src?: string
+	onClick?: () => void
 }
 
 export const Avatar: FC<AvatarProps> = ({ status, onClick, src, nickname = 'N/A', ...rest }) => {
 	return src ? (
 		<img
 			{...rest}
-			src={src}
+			src={src ? src : undefined}
 			onClick={onClick}
 			className={classNames(
 				'avatar',

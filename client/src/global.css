@@ -61,6 +61,17 @@ html {
 	}
 }
 
+.chat-input-container {
+	@apply p-4 w-full flex relative;
+}
+
+.chat-input-container::after {
+	@apply h-6 absolute top-[-24px];
+	content: '';
+	width: calc(100% - 32px);
+	background: linear-gradient(180deg, rgba(52, 50, 72, 0) 0%, #343248 100%);
+}
+
 @layer components {
 	.auth-background {
 		@apply h-screen w-screen;

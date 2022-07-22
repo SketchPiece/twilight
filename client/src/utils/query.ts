@@ -1,10 +1,6 @@
-type EncodeURIComponentType = string | number | boolean
+type KeyType = string | number | symbol
 
-type ValueType = EncodeURIComponentType | null | undefined
-
-// !todo: better types for query
-
-export const query = (data: Record<string, any>) =>
+export const query = (data: Record<KeyType, any>) =>
 	'?' +
 	Object.entries(data)
 		.filter(([_, value]) => value !== undefined && value !== null && value !== '')

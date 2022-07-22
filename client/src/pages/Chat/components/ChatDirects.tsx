@@ -26,12 +26,12 @@ export const ChatDirects = () => {
 	const onSearchChange = async (e: ChangeEvent<HTMLInputElement>) => {
 		const searchText = e.target.value
 		setSearch(searchText)
-		if (!searchText) {
+		if (!searchText.trim()) {
 			debouncedGetUsers.cancel()
 			return setLoading(false)
 		}
 		setLoading(true)
-		debouncedGetUsers(searchText)
+		debouncedGetUsers(searchText.trim())
 	}
 
 	return (
@@ -50,16 +50,20 @@ export const ChatDirects = () => {
 			<div className="flex flex-col gap-3 p-3">
 				{loading ? (
 					<>loading...</> // loading case for both directs and searched users
-				) : search.length ? ( // if search is not empty we sholud display searched users, otherwise display directs
+				) : search.trim().length ? ( // if search is not empty we sholud display searched users, otherwise display directs
 					searchedUsers?.map((user, i) => (
-						<ChatDirect nickname={user.nickname} avatarUrl={user.avatarUrl} key={i} />
+						<ChatDirect
+							nickname={user.nickname}
+							avatarUrl={user.avatarUrl ? user.avatarUrl : undefined}
+							key={i}
+						/>
 					))
 				) : (
 					directs.map((direct, i) => (
 						<ChatDirect
 							nickname={direct.nickname}
 							unseenNumber={direct.unseenNumber}
-							avatarUrl={direct.avatarUrl}
+							avatarUrl={direct.avatarUrl ? direct.avatarUrl : undefined}
 							status={direct.status}
 							lastMessage={direct.lastMessage}
 							key={i}

@@ -14,7 +14,7 @@ export const ChatInput: FC<ChatInputProps> = ({ onChange, value }) => {
 	}
 
 	return (
-		<div className="p-4 w-full flex relative">
+		<div className="chat-input-container">
 			<textarea
 				value={value}
 				ref={textareaRef}
